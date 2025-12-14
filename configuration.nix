@@ -7,12 +7,14 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  # Mount btrfs with zstd compression
   fileSystems = {
     "/".options = [ "compress=zstd" ];
     "/home".options = [ "compress=zstd" ];
     "/nix".options = [ "compress=zstd" "noatime" ];
   };
 
+  # Power management settings
   services.thermald.enable = true;
   services.tlp = {
     enable = true;
@@ -33,6 +35,7 @@
     };
   };
 
+  # Configure hybrid intel/nvidia settings
   specialisation = {
     nvidia.configuration = {
       services.xserver.videoDrivers = [ "nvidia" ];
@@ -52,10 +55,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "laptop"; # Define your hostname.
+  networking.hostName = "laptop";
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
 
@@ -64,13 +66,12 @@
     enable = true;
     autoRepeatDelay = 200;
     autoRepeatInterval = 35;
-    windowManager.qtile.enable = true;
-    # windowManager.dwm = {
-    #   enable = true;
-    #   package = pkgs.dwm.overrideAttrs {
-    #     src = ./config/dwm;
-    #   };
-    # };
+    windowManager.dwm = {
+      enable = true;
+      package = pkgs.dwm.overrideAttrs {
+        src = ./config/dwm;
+      };
+    };
   };
 
   services.pipewire = {
@@ -116,6 +117,10 @@
     "android-studio-stable"
     "nvidia-x11"
     "nvidia-settings"
+  ];
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
