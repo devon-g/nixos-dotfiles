@@ -37,12 +37,15 @@
       services.xserver.videoDrivers = [ "nvidia" ];
       hardware.graphics.enable = true;
 
-      hardware.nvidia.modesetting.enable = true;
-      hardware.nvidia.open = true;
-      hardware.nvidia.prime = {
-        sync.enable = true;
-        nvidiaBusId = "PCI:1:0:0";
-        intelBusId = "PCI:0:2:0";
+      hardware.nvidia = {
+        modesetting.enable = true;
+        open = true;
+        prime = {
+          offload.enable = true;
+          nvidiaBusId = "PCI:1:0:0";
+          intelBusId = "PCI:0:2:0";
+        };
+        powerManagement.finegrained = true;
       };
     };
   };
@@ -59,13 +62,6 @@
 
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
-
-  services.displayManager.ly.enable = true;
-  services.xserver = {
-    enable = true;
-    autoRepeatDelay = 200;
-    autoRepeatInterval = 35;
-  };
 
   services.pipewire = {
     enable = true;
