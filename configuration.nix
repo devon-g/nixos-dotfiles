@@ -81,9 +81,6 @@
   users.users.devon = {
     isNormalUser = true;
     extraGroups = [ "wheel" "libvirtd" "kvm" "adbusers" ];
-    packages = with pkgs; [
-      tree
-    ];
   };
 
   environment.systemPackages = with pkgs; [
