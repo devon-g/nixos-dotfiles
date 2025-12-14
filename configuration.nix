@@ -32,35 +32,26 @@
       CPU_MIN_PERF_ON_AC = 0;
       CPU_MAX_PERF_ON_AC = 100;
       CPU_MIN_PERF_ON_BAT = 0;
-      CPU_MAX_PERF_ON_BAT = 20;
+      CPU_MAX_PERF_ON_BAT = 33;
 
       START_CHANGE_THRESH_BAT0 = 40;
       STOP_CHANGE_THRESH_BAT0 = 80;
     };
   };
 
-  # Configure hybrid intel/nvidia settings
-  specialisation = {
-    nvidia.configuration = {
-      services.xserver.videoDrivers = [ "nvidia" ];
-      hardware.graphics.enable = true;
+  # Garbage collection
+  nix.settings.auto-optimise-store = true;
+  nix.gc.automatic = true;
+  nix.gc.dates = "daily";
+  nix.gc.options = "--delete-older-than +5";
 
-      hardware.nvidia = {
-        modesetting.enable = true;
-        open = true;
-        prime = {
-          offload.enable = true;
-          nvidiaBusId = "PCI:1:0:0";
-          intelBusId = "PCI:0:2:0";
-        };
-        powerManagement.finegrained = true;
-      };
-    };
-  };
+  # Use nvidia gpu with nouveau with nvk
+  hardware.graphics.enable = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  # Stop resume/suspend loop
   boot.kernelParams = [
     "button.lid_init_state=open"
   ];
@@ -99,6 +90,13 @@
     android-studio
     wget
     git
+
+    # Wayland
+    wayland-utils
+    wl-clipboard
+
+    # KDE
+    kdePackages.sddm-kcm
   ];
 
   programs.firefox.enable = true;
@@ -110,13 +108,6 @@
   programs.adb.enable = true;
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "android-studio-stable"
-    "nvidia-x11"
-    "nvidia-settings"
-    "wayland-utils"
-    "wl-clipboard"
-
-    # KDE
-    "kdePackages.sddm-kcm"
   ];
 
   fonts.packages = with pkgs; [
