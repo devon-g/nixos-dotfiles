@@ -10,7 +10,15 @@
     "/nix".options = [ "compress=zstd" "noatime" ];
   };
 
+  # KDE Plasma 6
+  services = {
+    desktopManager.plasma6.enable = true;
+    displayManager.sddm.enable = true;
+    displayManager.sddm.wayland.enable = true;
+  };
+
   # Power management settings
+  services.power-profiles-daemon.enable = false;
   services.thermald.enable = true;
   services.tlp = {
     enable = true;
@@ -104,6 +112,11 @@
     "android-studio-stable"
     "nvidia-x11"
     "nvidia-settings"
+    "wayland-utils"
+    "wl-clipboard"
+
+    # KDE
+    "kdePackages.sddm-kcm"
   ];
 
   fonts.packages = with pkgs; [
