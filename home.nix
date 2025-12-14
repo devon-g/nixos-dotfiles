@@ -5,7 +5,11 @@
   home.homeDirectory = "/home/devon";
   home.stateVersion = "25.11";
 
-  home.file.".config/nvim".source = ./config/nvim;
+  xdg.configFile."nvim" = {
+    source = config.lib.file.mkOutOfStoreSymlink "/home/devon/nixos-dotfiles/config/nvim";
+    recursive = true;
+  };
+
   programs.git = {
   	enable = true;
     settings = {
