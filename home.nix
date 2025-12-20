@@ -37,7 +37,8 @@ in
   programs.bash = {
     enable = true;
     shellAliases = {
-      btw = "echo i use nixos, btw";
+      rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#laptop";
+      update = "cd ~/nixos-dotfiles && nix flake update && sudo nix-rebuild switch --flake .#laptop";
     };
   };
 }
