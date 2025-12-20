@@ -40,8 +40,22 @@
   nix.gc.dates = "daily";
   nix.gc.options = "--delete-older-than +5";
 
-  # Use nvidia gpu with nouveau with nvk
+  # Hybrid graphics
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics.enable = true;
+  hardware.nvidia = {
+    open = true;
+    powerManagement = {
+      enable = true;
+      finegrained = true;
+    };
+    prime = {
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+      nvidiaBusId = "PCI:1:0:0";
+      intelBusId = "PCI:0:2:0";
+    };
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -100,6 +114,9 @@
   programs.adb.enable = true;
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "android-studio-stable"
+    "nvidia-x11"
+    "nvidia-settings"
+    "nvidia-persistenced"
   ];
 
   fonts.packages = with pkgs; [
